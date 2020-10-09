@@ -10,10 +10,49 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_28_213123) do
+ActiveRecord::Schema.define(version: 2020_10_09_200252) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "categories", force: :cascade do |t|
+    t.string "cat_name"
+    t.string "cat_desc"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "comments", force: :cascade do |t|
+    t.float "rating"
+    t.text "comment"
+    t.bigint "entry_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["entry_id"], name: "index_comments_on_entry_id"
+    t.index ["user_id"], name: "index_comments_on_user_id"
+  end
+
+  create_table "entries", force: :cascade do |t|
+    t.string "name"
+    t.string "address"
+    t.string "city"
+    t.string "state"
+    t.string "email"
+    t.string "facebook"
+    t.string "wed"
+    t.integer "phone"
+    t.text "desc"
+    t.string "icon"
+    t.string "img"
+    t.string "lat_long"
+    t.bigint "category_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["category_id"], name: "index_entries_on_category_id"
+    t.index ["user_id"], name: "index_entries_on_user_id"
+  end
 
   create_table "things", force: :cascade do |t|
     t.string "name"
@@ -51,4 +90,8 @@ ActiveRecord::Schema.define(version: 2020_09_28_213123) do
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
 
+  add_foreign_key "comments", "entries"
+  add_foreign_key "comments", "users"
+  add_foreign_key "entries", "categories"
+  add_foreign_key "entries", "users"
 end
