@@ -4,4 +4,5 @@ Rails.application.routes.draw do
   namespace :api do
     resources :things
   end
+  get '*other', to: 'static#index'
 end
